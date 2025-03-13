@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Bias Map - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #ff6b00;
+            --secondary-orange: #ff8c38;
+            --dark-orange: #e05800;
+            --black: #111111;
+            --dark-gray: #333333;
+            --medium-gray: #666666;
+            --light-gray: #f0f0f0;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background-color: var(--white);
+        }
+        
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            background-color: var(--black);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-orange);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        .btn {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        .btn:hover {
+            color: var(--primary-orange);
+            background-color: rgba(255, 107, 0, 0.1);
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(17, 17, 17, 0.8), rgba(17, 17, 17, 0.9)), 
+                        url('https://via.placeholder.com/1500x800') no-repeat center center/cover;
+            color: var(--white);
+            padding: 5rem 5%;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            font-weight: 700;
+            color: var(--primary-orange);
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            color: var(--light-gray);
+        }
+        
+        .cta-btn {
+            display: inline-block;
+            background: var(--primary-orange);
+            color: var(--white);
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .cta-btn:hover {
+            background: var(--dark-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        
+        /* Info Section */
+        .info {
+            padding: 5rem 5%;
+            text-align: center;
+            background-color: var(--light-gray);
+        }
+        
+        .info h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--black);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .info h2:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-orange);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .info p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+        
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 5rem 5%;
+            background-color: var(--white);
+        }
+        
+        .feature-card {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-top: 4px solid var(--primary-orange);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .feature-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-orange);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--black);
+        }
+        
+        .feature-card p {
+            color: var(--medium-gray);
+        }
+        
+        /* How to Use Section */
+        .how-to-use {
+            padding: 5rem 5%;
+            background-color: var(--black);
+            text-align: center;
+            color: var(--white);
+        }
+        
+        .how-to-use h2 {
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            color: var(--primary-orange);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .how-to-use h2:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-orange);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .step-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-orange);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .step h3 {
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+        
+        .step p {
+            color: var(--light-gray);
+        }
+        
+        /* Visualization Preview */
+        .visualization {
+            padding: 5rem 5%;
+            text-align: center;
+            background-color: var(--white);
+        }
+        
+        .visualization h2 {
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            color: var(--black);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .visualization h2:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-orange);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .bias-preview {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid var(--medium-gray);
+        }
+        
+        .bias-preview img {
+            width: 100%;
+            border-radius: 8px;
+            border: 3px solid var(--black);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--black);
+            color: var(--white);
+            padding: 3rem 5%;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary-orange);
+        }
+        
+        .footer-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin: 0 1rem;
+        }
+        
+        .footer-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-orange);
+        }
+        
+        .social-icons {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .social-icons li {
+            margin: 0 0.5rem;
+        }
+        
+        .social-icons a {
+            color: var(--white);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--dark-gray);
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            background: var(--primary-orange);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+        }
+        
+        /* Media Queries */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 5%;
+            }
+            
+            nav ul {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 60px);
+                background-color: var(--black);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 2rem;
+                transition: all 0.3s ease;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            
+            nav ul.active {
+                left: 0;
+            }
+            
+            nav ul li {
+                margin: 1.5rem 0;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .feature-card {
+                margin-bottom: 2rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-links {
+                margin: 1.5rem 0;
+                flex-direction: column;
+            }
+            
+            .footer-links li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Media Bias Map</div>
+        <ul>
+            <li><a href="/" class="btn">Home</a></li>
+            <li><a href="/bias-map" class="btn">Bias Graph</a></li>
+            <li><a href="/news-summary" class="btn">Summarize News</a></li>
+            <li><a href="/news-today" class="btn">News Today</a></li>
+            <li><a href="/fake-news" class="btn">Fake News Checker</a></li>
+        </ul>
+        <div class="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+    
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Uncover Media Bias with AI</h1>
+            <p>Welcome to the Media Bias & Fact-Check Platform, your one-stop destination for analyzing news credibility, political bias, and misinformation detection. Our platform utilizes AI & Machine Learning to classify news sources as left, right, or neutral, provide real-time fact-checking, and summarize news articles with sentiment analysis.</p>
+            <a href="/bias-map" class="cta-btn">Explore The Bias Map</a>
+        </div>
+    </header>
+    
+    <section class="info">
+        <h2>How It Works</h2>
+        <p>We analyze news sources and classify them based on AI clustering models. This helps readers understand bias and credibility through data-driven insights and machine learning algorithms.</p>
+    </section>
+    
+    <section class="features">
+        <div class="feature-card">
+            <i class="fas fa-brain"></i>
+            <h3>AI-Powered Analysis</h3>
+            <p>We use machine learning to detect political bias in news sources and provide transparent evaluations.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-chart-scatter"></i>
+            <h3>Interactive Bias Map</h3>
+            <p>Explore a dynamic visual representation of media bias across the political spectrum.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-database"></i>
+            <h3>Data-Driven Insights</h3>
+            <p>Our models are trained on verified datasets to provide reliable classifications you can trust.</p>
+        </div>
+    </section>
+    
+    <section class="how-to-use">
+        <h2>How To Use Our Platform</h2>
+        <div class="step-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Choose A Tool</h3>
+                <p>Select from our bias map, news summarizer, or fake news checker.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Enter Content</h3>
+                <p>Paste an article URL or text for immediate analysis.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Review Results</h3>
+                <p>Get instant bias ratings, factual analysis, and summaries.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="visualization">
+        <h2>Media Bias Visualization</h2>
+        <div class="bias-preview">
+            <img src="/api/placeholder/800/500" alt="Media Bias Graph Preview">
+        </div>
+    </section>
+    
+    <footer>
+        <div class="footer-content">
+            <div>
+                <div class="footer-logo">Media Bias Map</div>
+                <p>Bringing transparency to news media</p>
+            </div>
+            <ul class="footer-links">
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/methodology">Methodology</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/privacy">Privacy Policy</a></li>
+            </ul>
+        </div>
+        <ul class="social-icons">
+            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+            <li><a href="#"><i class="fab fa-github"></i></a></li>
+        </ul>
+        <p class="copyright">© 2025 Media Bias Map. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('nav ul');
+        
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('nav ul li a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

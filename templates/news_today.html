@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Today</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+            --card-hover: #252525;
+            --primary-orange: #ff6700;
+            --secondary-orange: #f4a261;
+            --light-orange: #ffcc66;
+            --text-white: #ffffff;
+            --text-light: #f0f0f0;
+            --text-muted: #bbbbbb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--secondary-orange);
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background-color: var(--primary-orange);
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(255, 103, 0, 0.3);
+        }
+        
+        .header h1 {
+            color: var(--text-white);
+            font-size: 2.5rem;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        
+        .header-icon {
+            font-size: 1.8rem;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto 50px auto;
+            padding: 0 20px;
+        }
+        
+        .filter-container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border-left: 4px solid var(--primary-orange);
+        }
+        
+        .filter-title {
+            font-size: 1.2rem;
+            color: var(--light-orange);
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .filter-title i {
+            margin-right: 10px;
+        }
+        
+        .filter-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .form-group label {
+            margin-bottom: 8px;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        select, input {
+            padding: 12px;
+            background: #2a2a2a;
+            color: var(--text-light);
+            border: 1px solid #444;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 2px rgba(255, 103, 0, 0.2);
+        }
+        
+        .submit-btn {
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            margin-top: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 150px;
+        }
+        
+        .submit-btn i {
+            margin-right: 8px;
+        }
+        
+        .submit-btn:hover {
+            background-color: #ff5500;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 103, 0, 0.3);
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 25px;
+        }
+        
+        .news-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .news-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background: var(--card-hover);
+        }
+        
+        .news-header {
+            padding: 20px 20px 0 20px;
+        }
+        
+        .news-title {
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .news-title a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .news-title a:hover {
+            color: var(--light-orange);
+        }
+        
+        .news-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            padding: 6px 12px;
+            background-color: rgba(255, 103, 0, 0.15);
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .meta-item i {
+            margin-right: 6px;
+            color: var(--primary-orange);
+        }
+        
+        .bias {
+            color: var(--light-orange);
+        }
+        
+        .sentiment {
+            color: var(--secondary-orange);
+        }
+        
+        .news-content {
+            padding: 0 20px 20px 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .keywords {
+            margin-bottom: 15px;
+        }
+        
+        .keyword-label {
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-right: 6px;
+        }
+        
+        .keyword-list {
+            color: var(--secondary-orange);
+        }
+        
+        .content-preview {
+            margin-bottom: 20px;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .summarize-btn {
+            align-self: flex-start;
+            background-color: transparent;
+            color: var(--text-white);
+            border: 2px solid var(--primary-orange);
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .summarize-btn i {
+            margin-right: 8px;
+            font-size: 0.85rem;
+        }
+        
+        .summarize-btn:hover {
+            background-color: var(--primary-orange);
+            color: white;
+        }
+        
+        .summary {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(255, 103, 0, 0.1);
+            border-radius: 8px;
+            color: var(--light-orange);
+            display: none;
+        }
+        
+        .summary.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-form {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .form-group {
+                width: 100%;
+            }
+            
+            .submit-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <h1><i class="fas fa-newspaper header-icon"></i>News Today</h1>
+</header>
+
+<div class="container">
+    <div class="filter-container">
+        <div class="filter-title">
+            <i class="fas fa-filter"></i>Customize Your News
+        </div>
+        <form class="filter-form" method="GET" action="">
+            <div class="form-group">
+                <label for="country">Country</label>
+                <select id="country" name="country">
+                    <option value="us">United States</option>
+                    <option value="in">India</option>
+                    <option value="gb">United Kingdom</option>
+                    <option value="ca">Canada</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                    <option value="general">General</option>
+                    <option value="business">Business</option>
+                    <option value="technology">Technology</option>
+                    <option value="entertainment">Entertainment</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="search">Search</label>
+                <input type="text" id="search" name="q" placeholder="Enter keywords...">
+            </div>
+            
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-search"></i>Apply Filters
+            </button>
+        </form>
+    </div>
+
+    <div class="news-grid">
+        {% for article in news %}
+        <div class="news-item">
+            <div class="news-header">
+                <h2 class="news-title"><a href="{{ article.url }}" target="_blank">{{ article.title }}</a></h2>
+                <div class="news-meta">
+                    <div class="meta-item bias">
+                        <i class="fas fa-balance-scale"></i>{{ article.bias }}
+                    </div>
+                    <div class="meta-item sentiment">
+                        <i class="fas fa-heart"></i>{{ article.sentiment }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="news-content">
+                <div class="keywords">
+                    <span class="keyword-label"><i class="fas fa-tags"></i> Keywords:</span>
+                    <span class="keyword-list">{{ article.keywords | join(', ') }}</span>
+                </div>
+                
+                <p class="content-preview">{{ article.content[:200] }}...</p>
+                
+                <button class="summarize-btn" data-text="{{ article.content }}">
+                    <i class="fas fa-compress-alt"></i>Summarize Article
+                </button>
+                
+                <div class="summary"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".summarize-btn").click(function () {
+            let button = $(this);
+            let summaryDiv = button.siblings(".summary");
+            let text = button.data("text");
+            
+            // Change button text to loading state
+            button.html('<i class="fas fa-spinner fa-spin"></i>Summarizing...');
+            button.prop('disabled', true);
+
+            $.post("/news-today/summarize", {news_text: text}, function (response) {
+                if (response.summary) {
+                    summaryDiv.html('<i class="fas fa-file-alt"></i> <strong>Summary:</strong> ' + response.summary);
+                    summaryDiv.addClass('active');
+                } else {
+                    summaryDiv.html('<i class="fas fa-exclamation-circle"></i> <strong>Error:</strong> Unable to generate summary.');
+                    summaryDiv.addClass('active');
+                }
+                
+                // Reset button
+                button.html('<i class="fas fa-compress-alt"></i>Summarize Article');
+                button.prop('disabled', false);
+            }).fail(function() {
+                summaryDiv.html('<i class="fas fa-exclamation-circle"></i> <strong>Error:</strong> Connection failed.');
+                summaryDiv.addClass('active');
+                
+                // Reset button
+                button.html('<i class="fas fa-compress-alt"></i>Summarize Article');
+                button.prop('disabled', false);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

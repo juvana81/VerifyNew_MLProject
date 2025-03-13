@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Bias Map</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --primary-black: #0D0D0D;
+            --secondary-black: #1A1A1A;
+            --primary-orange: #FF7800;
+            --secondary-orange: #FF9E45;
+            --primary-white: #FFFFFF;
+            --secondary-white: #F0F0F0;
+        }
+        
+        body {
+            background-color: var(--primary-black);
+            color: var(--primary-white);
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding-top: 20px;
+        }
+        
+        .navbar {
+            background-color: var(--secondary-black);
+            border-bottom: 2px solid var(--primary-orange);
+        }
+        
+        .navbar-brand {
+            color: var(--primary-orange) !important;
+            font-weight: bold;
+        }
+        
+        h2 {
+            color: var(--primary-orange);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+            background-color: var(--secondary-black);
+            border-top: 2px solid var(--primary-orange);
+            color: var(--secondary-white);
+        }
+        
+        .card {
+            background-color: var(--secondary-black);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid var(--secondary-orange);
+            box-shadow: 0 4px 8px rgba(255, 120, 0, 0.1);
+        }
+        
+        #bias-map {
+            width: 100%;
+            height: 500px;  /* Default height */
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        /* Fullscreen map on mobile */
+        @media (max-width: 768px) {
+            #bias-map {
+                height: 700px;
+            }
+        }
+        
+        .legend {
+            background: var(--secondary-black);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid var(--secondary-orange);
+        }
+        
+        .legend p {
+            margin-bottom: 8px;
+            color: var(--secondary-white);
+        }
+        
+        .legend p b {
+            color: var(--primary-orange);
+        }
+        
+        .legend span {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 3px;
+        }
+        
+        .form-select, .form-control {
+            background-color: var(--secondary-black);
+            color: var(--primary-white);
+            border: 1px solid var(--secondary-orange);
+        }
+        
+        .form-select:focus, .form-control:focus {
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 0.25rem rgba(255, 120, 0, 0.25);
+            background-color: var(--secondary-black);
+            color: var(--primary-white);
+        }
+        
+        option {
+            background-color: var(--secondary-black);
+        }
+        
+        /* Custom legend colors to match the black-orange-white theme */
+        .left-bias { background: var(--primary-orange) !important; }
+        .left-center-bias { background: var(--secondary-orange) !important; }
+        .center-bias { background: var(--primary-white) !important; }
+        .right-center-bias { background: #E8E8E8 !important; }
+        .right-bias { background: #C0C0C0 !important; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">📊 Media Bias Map</a>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+    <h2 class="text-center">Interactive Media Bias Map</h2>
+
+    <!-- Filter Dropdown -->
+    <div class="row my-4">
+        <div class="col-md-6 mb-3 mb-md-0">
+            <select class="form-select" id="filter-bias">
+                <option value="all">Show All</option>
+                <option value="left">Left</option>
+                <option value="left-center">Left-Center</option>
+                <option value="center">Center</option>
+                <option value="right-center">Right-Center</option>
+                <option value="right">Right</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="search" placeholder="Search news source...">
+        </div>
+    </div>
+
+    <!-- Bias Legend -->
+    <div class="legend">
+        <p><b>LEGEND:</b></p>
+        <p><span class="left-bias"></span> Left</p>
+        <p><span class="left-center-bias"></span> Left-Center</p>
+        <p><span class="center-bias"></span> Center</p>
+        <p><span class="right-center-bias"></span> Right-Center</p>
+        <p><span class="right-bias"></span> Right</p>
+    </div>
+
+    <!-- Plot -->
+    <div class="card">
+        <div id="bias-map">
+            {{ plot | safe }}
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <p>Made with <span style="color: var(--primary-orange);">❤️</span> using Flask & Plotly</p>
+</div>
+
+<!-- jQuery Script for Filtering -->
+<script>
+    $(document).ready(function () {
+        $("#filter-bias").change(function () {
+            var biasType = $(this).val();
+            $("circle").each(function () {
+                var dataBias = $(this).attr("data-bias");
+                if (biasType === "all" || dataBias === biasType) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+
+        $("#search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("circle").each(function () {
+                var sourceName = $(this).attr("data-source").toLowerCase();
+                if (sourceName.includes(value)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
